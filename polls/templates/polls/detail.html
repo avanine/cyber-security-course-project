@@ -11,11 +11,18 @@
     <main>
         <a href="{% url 'polls:index' %}" class="back-link">&larr; Back to polls</a>
         <h1>{{ question.question_text }}</h1>
-        <ul>
-        {% for choice in question.choice_set.all %}
-            <li>{{ choice.choice_text }}</li>
-        {% endfor %}
-        </ul>
+
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            {% for choice in question.choice_set.all %}
+                <div>
+                    <input type="radio" id="choice{{ forloop.counter }}" name="choice" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                </div>
+            {% endfor %}
+            <input type="submit" value="Vote">
+        </form>
     </main>
 </body>
 </html>
