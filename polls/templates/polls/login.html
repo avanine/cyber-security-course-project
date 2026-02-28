@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Login</title>
     <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 </head>
 <body>
     <main>
-        <h1>Register</h1>
+        <h1>Login</h1>
         {% if error %}
             <p><strong>{{ error }}</strong></p>
         {% endif %}
@@ -23,9 +23,9 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <input type="submit" value="Register">
+            <input type="submit" value="Login">
         </form>
-        <p>Already have an account? <a href="{% url 'polls:login' %}">Log in</a></p>
+        <p>Don't have an account? <a href="{% url 'polls:register' %}">Register</a></p>
     </main>
 </body>
 </html>
