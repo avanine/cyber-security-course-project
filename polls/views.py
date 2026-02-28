@@ -1,6 +1,8 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import login as auth_login
 
 from .models import Choice, Question
 
@@ -35,3 +37,25 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+
+        if User.objects.filter(username=username).exists():
+            return render(request, 'polls/register.html', {
+                'error': 'Username already taken',
+            })
+
+        user = User(username=username)
+        # A02:2021 Cryptographic Failures: password is stored in plaintext without hashing
+        user.password = password
+        # FIX: use set_password which hashes the password properly
+        # user.set_password(password)
+        user.save()
+        
+        return redirect('polls:index')
+
+    return render(request, 'polls/register.html')
