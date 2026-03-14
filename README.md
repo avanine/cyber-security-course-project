@@ -2,7 +2,33 @@
 
 This project was done for the University of Helsinki Cyber Security course. It demonstrates 5 different security flaws from the OWASP 2021 list.
 
-### Report
+## Instructions to get the app running
+
+After cloning the repository, create and activate a virtual environment
+```
+python3 -m venv venv
+```
+```
+source venv/bin/activate
+```
+Install dependencies
+```
+pip install -r requirements.txt
+```
+Run migrations
+```
+python manage.py migrate
+```
+Create a superuser for the admin panel (from there you can manage polls)
+```
+python manage.py createsuperuser
+```
+Start the development server
+```
+python manage.py runserver
+```
+
+## Report
 
 #### FLAW 1:
 A02:2021 Cryptographic Failures: password is stored in plaintext without hashing
