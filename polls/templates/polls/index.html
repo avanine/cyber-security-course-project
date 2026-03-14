@@ -15,6 +15,7 @@
             <p><a href="{% url 'polls:login' %}">Log in</a> | <a href="{% url 'polls:register' %}">Register</a></p>
         {% endif %}
         <h1>Polls</h1>
+        <p><a href="{% url 'polls:search' %}">Search questions</a></p>
         {% if latest_question_list %}
             <ul>
             {% for question in latest_question_list %}
