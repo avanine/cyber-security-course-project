@@ -9,8 +9,12 @@
 </head>
 <body>
     <main>
+        {% if user.is_authenticated %}
+            <p>Logged in as <strong>{{ user.username }}</strong> | <a href="{% url 'polls:logout' %}">Log out</a></p>
+        {% endif %}
         <a href="{% url 'polls:index' %}" class="back-link">&larr; Back to polls</a>
         <h1>{{ question.question_text }}</h1>
+        <p>Created by: {{ question.owner.username }}</p>
 
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
         <form action="{% url 'polls:vote' question.id %}" method="post">

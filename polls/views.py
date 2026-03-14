@@ -17,9 +17,11 @@ def detail(request, question_id):
     if not request.user.is_authenticated:
         return redirect('polls:login')
     # A01:2021 Broken Access Control: any logged-in user can view any question by ID
-    question = get_object_or_404(Question, pk=question_id)
+    question = Question.objects.filter(pk=question_id).first()
     # A01 FIX: check that the question belongs to the current user
-    # question = get_object_or_404(Question, pk=question_id, owner=request.user)
+    # question = Question.objects.filter(pk=question_id, owner=request.user).first()
+    if not question:
+        return render(request, 'polls/not_found.html')
     return render(request, 'polls/detail.html', {'question': question})
 
 def results(request, question_id):

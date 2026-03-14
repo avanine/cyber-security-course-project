@@ -9,6 +9,11 @@
 </head>
 <body>
     <main>
+        {% if user.is_authenticated %}
+            <p>Logged in as <strong>{{ user.username }}</strong> | <a href="{% url 'polls:logout' %}">Log out</a></p>
+        {% else %}
+            <p><a href="{% url 'polls:login' %}">Log in</a> | <a href="{% url 'polls:register' %}">Register</a></p>
+        {% endif %}
         <h1>Polls</h1>
         {% if latest_question_list %}
             <ul>
