@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.core.cache import cache
+from django.db import connection
 
 from .models import Choice, Question
 
@@ -114,3 +115,24 @@ def login_view(request):
 def logout_view(request):
     auth_logout(request)
     return redirect('polls:login')
+
+
+def search(request):
+    query = request.GET.get('query', '')
+    questions = []
+
+    if query:
+        # A03:2021 Injection: user input is concatenated directly into SQL
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT id, question_text FROM polls_question "
+                "WHERE question_text LIKE '%%" + query + "%%'"
+            )
+            questions = [{'id': row[0], 'question_text': row[1]} for row in cursor.fetchall()]
+        # A03 FIX: use the Django ORM which parameterizes queries automatically
+        # questions = Question.objects.filter(question_text__icontains=query)
+
+    return render(request, 'polls/search.html', {
+        'questions': questions,
+        'query': query,
+    })
